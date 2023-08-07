@@ -1,0 +1,52 @@
+name: Python Test and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest
+
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Google Cloud SDK
+  #       uses: google-github-actions/setup-gcloud@v0.3.0
+  #       with:
+  #         service_account_key: ${{ secrets.GOOGLE_CREDENTIALS }}
+  #         project_id: ${{ secrets.GCLOUD_PROJECT }}
+
+  #     - name: Deploy to Google VM
+  #       run: |
+  #         gcloud compute scp --recurse . erik@instance1:/home/erik/bot2
+  #         # Replace the following commands with your deployment steps
+  #         # For example, you might use gcloud commands to copy files to your VM
+  #         gcloud compute scp --recurse ./your_app_files username@vm-instance-name:/path/to/destination
