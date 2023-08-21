@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  bot2:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - bot2-network
+    restart:
+      always
+
+networks:
+  bot2-network:
